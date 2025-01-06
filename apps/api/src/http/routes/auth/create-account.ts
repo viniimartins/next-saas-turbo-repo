@@ -42,7 +42,6 @@ export async function createAccount(app: FastifyInstance) {
         },
       })
 
-
       const passwordHash = await hash(password, 6)
 
       await prisma.user.create({
