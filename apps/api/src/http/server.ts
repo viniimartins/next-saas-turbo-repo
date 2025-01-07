@@ -14,6 +14,7 @@ import { authenticateWithPassword } from './routes/auth/authenticate-with-passwo
 import { createAccount } from './routes/auth/create-account'
 import { getProfile } from './routes/auth/ger-profile'
 import { requestPasswordRecover } from './routes/auth/request-password-recover'
+import { requestPassword } from './routes/auth/reset-password'
 import { errorHandler } from './routes/error-handler'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
@@ -48,6 +49,7 @@ app.register(createAccount)
 app.register(authenticateWithPassword)
 app.register(getProfile)
 app.register(requestPasswordRecover)
+app.register(requestPassword)
 
 app.listen({ port: 3333 }).then(() => {
   console.log('HTPP Server running!')
