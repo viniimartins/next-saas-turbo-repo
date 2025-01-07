@@ -1,8 +1,8 @@
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
-import fastifySwaggerUi from '@fastify/swagger-ui'
-import { fastify } from 'fastify'
+import fastifySwaggerUI from '@fastify/swagger-ui'
+import fastify from 'fastify'
 import {
   jsonSchemaTransform,
   serializerCompiler,
@@ -10,47 +10,46 @@ import {
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 
-import { authenticateWithPassword } from './routes/auth/authenticate-with-password'
+import { errorHandler } from '@/http/error-handler'
+import { authenticateWithPassword } from '@/http/routes/auth/authenticate-with-password'
+import { requestPasswordRecover } from '@/http/routes/auth/request-password-recover'
+
 import { createAccount } from './routes/auth/create-account'
-import { getProfile } from './routes/auth/ger-profile'
-import { requestPasswordRecover } from './routes/auth/request-password-recover'
-import { requestPassword } from './routes/auth/reset-password'
-import { errorHandler } from './routes/error-handler'
+import { resetPassword } from './routes/auth/reset-password'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.setSerializerCompiler(serializerCompiler)
 app.setValidatorCompiler(validatorCompiler)
+
 app.setErrorHandler(errorHandler)
 
 app.register(fastifySwagger, {
   openapi: {
     info: {
-      title: 'Next.js Saas',
-      description: 'Full-stack SaaS app with multi-tenant & RBAC',
+      title: 'Next.js SaaS',
+      description: 'Full-stack SaaS with multi-tenant & RBAC.',
       version: '1.0.0',
     },
-    servers: [],
   },
   transform: jsonSchemaTransform,
 })
 
-app.register(fastifySwaggerUi, {
+app.register(fastifySwaggerUI, {
   routePrefix: '/docs',
 })
 
 app.register(fastifyJwt, {
-  secret: 'my-jwt-secret',
+  secret: 'my-secret-key',
 })
 
 app.register(fastifyCors)
 
 app.register(createAccount)
 app.register(authenticateWithPassword)
-app.register(getProfile)
 app.register(requestPasswordRecover)
-app.register(requestPassword)
+app.register(resetPassword)
 
-app.listen({ port: 3333 }).then(() => {
-  console.log('HTPP Server running!')
+app.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
+  console.log('HTTP server running!')
 })

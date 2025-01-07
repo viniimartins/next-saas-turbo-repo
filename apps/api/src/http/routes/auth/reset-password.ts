@@ -7,12 +7,12 @@ import { prisma } from '@/lib/prisma'
 
 import { UnauthorizedError } from '../_errors/unauthorized-error'
 
-export async function requestPassword(app: FastifyInstance) {
+export async function resetPassword(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
     '/password/reset',
     {
       schema: {
-        tags: ['auth'],
+        tags: ['Auth'],
         summary: 'Get authenticated user profile',
         body: z.object({
           code: z.string(),
