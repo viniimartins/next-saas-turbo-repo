@@ -14,7 +14,9 @@ import { errorHandler } from '@/http/error-handler'
 import { authenticateWithPassword } from '@/http/routes/auth/authenticate-with-password'
 import { requestPasswordRecover } from '@/http/routes/auth/request-password-recover'
 
+import { authenticateWithGithub } from './routes/auth/authenticate-with-github'
 import { createAccount } from './routes/auth/create-account'
+import { getProfile } from './routes/auth/get-profile'
 import { resetPassword } from './routes/auth/reset-password'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
@@ -48,6 +50,8 @@ app.register(fastifyCors)
 app.register(createAccount)
 app.register(authenticateWithPassword)
 app.register(requestPasswordRecover)
+app.register(getProfile)
+app.register(authenticateWithGithub)
 app.register(resetPassword)
 
 app.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
