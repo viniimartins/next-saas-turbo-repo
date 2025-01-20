@@ -39,7 +39,7 @@ export async function shutdownOrganization(app: FastifyInstance) {
 
         const { cannot } = getUserPermissions(userId, membership.role)
 
-        if (!cannot('delete', authOrganization)) {
+        if (cannot('delete', authOrganization)) {
           throw new UnauthorizedError(
             'You re not allowed to shutdown this organization',
           )
