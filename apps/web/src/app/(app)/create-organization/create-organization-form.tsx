@@ -16,8 +16,6 @@ export function OrganizationForm() {
     createOrganizationAction,
   )
 
-  console.log(errors)
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {success === false && message && (
