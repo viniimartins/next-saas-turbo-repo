@@ -10,9 +10,10 @@ import { cn } from '@/lib/utils'
 
 import { SheetOverlay, SheetPortal, sheetVariants } from './ui/sheet'
 
-interface InterceptedSheetContentProps
-  extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
-  VariantProps<typeof sheetVariants> { }
+type InterceptedSheetContentProps = React.ComponentPropsWithoutRef<
+  typeof SheetPrimitive.Content
+> &
+  VariantProps<typeof sheetVariants>
 
 export const InterceptedSheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
