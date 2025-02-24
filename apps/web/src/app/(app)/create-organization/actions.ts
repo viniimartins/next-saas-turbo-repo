@@ -12,13 +12,16 @@ const organizationSchema = z
       .min(4, { message: 'Please, incluide at least 4 characters.' }),
     domain: z
       .string()
+      .transform((value) => (value === '' ? null : value))
       .nullable()
       .refine(
         (value) => {
           if (value) {
             const domainRegex = /^[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/
+
             return domainRegex.test(value)
           }
+
           return true
         },
         {
@@ -35,6 +38,7 @@ const organizationSchema = z
       if (data.shouldAttachUsersByDomain === true && !data.domain) {
         return false
       }
+
       return true
     },
     {
@@ -42,6 +46,7 @@ const organizationSchema = z
       path: ['domain'],
     },
   )
+
 export async function createOrganizationAction(data: FormData) {
   const result = organizationSchema.safeParse(Object.fromEntries(data))
 

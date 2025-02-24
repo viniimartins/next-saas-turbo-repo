@@ -36,7 +36,7 @@ export async function createOrganization(app: FastifyInstance) {
         const { name, domain, shouldAttachUsersByDomain } = request.body
 
         if (domain) {
-          const organizationByDomain = await prisma.organization.findFirst({
+          const organizationByDomain = await prisma.organization.findUnique({
             where: { domain },
           })
 
@@ -46,6 +46,8 @@ export async function createOrganization(app: FastifyInstance) {
             )
           }
         }
+
+        console.log('PASSOU')
 
         const organization = await prisma.organization.create({
           data: {
@@ -62,6 +64,8 @@ export async function createOrganization(app: FastifyInstance) {
             },
           },
         })
+
+        console.log(organization)
 
         return reply.status(201).send({
           organizationId: organization.id,

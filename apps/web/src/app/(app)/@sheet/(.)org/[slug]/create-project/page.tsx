@@ -7,7 +7,7 @@ export default function CreateProject() {
     <Sheet defaultOpen>
       <InterceptedSheetContent>
         <SheetHeader>
-          <SheetTitle>Create organization</SheetTitle>
+          <SheetTitle>Create Project</SheetTitle>
         </SheetHeader>
 
         <div className="py-4">
