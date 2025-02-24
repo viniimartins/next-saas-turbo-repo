@@ -8,12 +8,12 @@ export default async function OrgLayout({
 }>) {
   return (
     <div>
-      <div className="pt-6">
+      <div className="pt-4">
         <Header />
         <Tabs />
       </div>
 
-      <main className="mx-auto w-full max-w-[1200px] p-4">{children}</main>
+      <main className="mx-auto w-full max-w-[1200px] py-4">{children}</main>
     </div>
   )
 }
