@@ -47,8 +47,6 @@ export async function createOrganization(app: FastifyInstance) {
           }
         }
 
-        console.log('PASSOU')
-
         const organization = await prisma.organization.create({
           data: {
             name,
@@ -64,8 +62,6 @@ export async function createOrganization(app: FastifyInstance) {
             },
           },
         })
-
-        console.log(organization)
 
         return reply.status(201).send({
           organizationId: organization.id,
