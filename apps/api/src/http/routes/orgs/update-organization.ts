@@ -68,18 +68,18 @@ export async function updateOrganization(app: FastifyInstance) {
               'Another organiation with same domain already exists',
             )
           }
-
-          await prisma.organization.update({
-            where: {
-              id: organization.id,
-            },
-            data: {
-              name,
-              domain,
-              shouldAttachUsersByDomain,
-            },
-          })
         }
+
+        await prisma.organization.update({
+          where: {
+            id: organization.id,
+          },
+          data: {
+            name,
+            domain,
+            shouldAttachUsersByDomain,
+          },
+        })
 
         return reply.status(204).send()
       },
