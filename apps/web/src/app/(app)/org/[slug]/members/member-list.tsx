@@ -85,7 +85,7 @@ export async function MemberList() {
                         disabled={
                           member.userId === membership.userId ||
                           member.userId === organization.ownerId ||
-                          permissions?.can('update', 'User')
+                          permissions?.cannot('update', 'User')
                         }
                       />
 
