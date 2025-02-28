@@ -1,4 +1,5 @@
 import { type FormEvent, useState, useTransition } from 'react'
+import { requestFormReset } from 'react-dom'
 
 interface FormState {
   success: boolean
@@ -27,15 +28,16 @@ export function useFormState(
     const form = event.currentTarget
     const data = new FormData(form)
 
-    startTransition(async () => {
-      const state = await action(data)
+    const state = await action(data)
 
-      if (state.success === true && onSuccess) {
-        await onSuccess()
-      }
-
+    startTransition(() => {
       setFormState(state)
+      requestFormReset(form)
     })
+
+    if (state.success === true && onSuccess) {
+      await onSuccess()
+    }
   }
 
   return [formState, handleSubmit, isPending] as const
