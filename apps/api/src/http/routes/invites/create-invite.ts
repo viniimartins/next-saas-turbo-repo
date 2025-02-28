@@ -57,7 +57,9 @@ export async function createInvite(app: FastifyInstance) {
           organization.shouldAttachUsersByDomain &&
           organization.domain === domain
         ) {
-          throw new BadRequestError(`Users with "${domain}"`)
+          throw new BadRequestError(
+            `Users with '${domain}' domain will join your organization automatically on login.`,
+          )
         }
 
         const inviteWithSameEmail = await prisma.invite.findUnique({
