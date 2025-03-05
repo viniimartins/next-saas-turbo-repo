@@ -75,7 +75,7 @@ export async function getPendingInvites(app: FastifyInstance) {
             },
           },
           where: {
-            id: user.email,
+            email: user.email,
           },
         })
 
