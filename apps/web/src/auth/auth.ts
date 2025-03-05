@@ -57,6 +57,7 @@ export async function auth() {
     const { user } = await getProfile()
 
     return { user }
+    // eslint-disable-next-line prettier/prettier
   } catch { }
 
   redirect('/api/auth/sign-out')
