@@ -51,8 +51,9 @@ export async function authenticateWithGithub(app: FastifyInstance) {
 
       const githubAcessTokenData = await githubAccessTokenResponse.json()
       console.log('GitHub OAuth Client ID:', env.GITHUB_OAUTH_CLIENT_ID)
+      console.log('GitHub OAuth Client ID:', env.GITHUB_OAUTH_CLIENT_SECRET)
 
-      console.log(`githubAcessTokenData => ${githubAccessTokenResponse}`)
+      console.log(`githubAcessTokenData => ${githubAcessTokenData}`)
 
       const { access_token: githubAcessToken } = z
         .object({
