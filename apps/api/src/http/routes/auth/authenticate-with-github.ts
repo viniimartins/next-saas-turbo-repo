@@ -42,8 +42,6 @@ export async function authenticateWithGithub(app: FastifyInstance) {
       )
       githubOAuthURL.searchParams.set('code', code)
 
-      console.log(githubOAuthURL.toString())
-
       const githubAccessTokenResponse = await fetch(githubOAuthURL, {
         method: 'POST',
         headers: {
@@ -53,16 +51,6 @@ export async function authenticateWithGithub(app: FastifyInstance) {
 
       const githubAccessTokenData = await githubAccessTokenResponse.json()
 
-      console.log(`githubAccessTokenResponse, ${githubAccessTokenResponse}`)
-
-      console.log('GitHub OAuth Client ID:', env.GITHUB_OAUTH_CLIENT_ID)
-      console.log('GitHub OAuth Client Secret:', env.GITHUB_OAUTH_CLIENT_SECRET)
-      console.log(
-        'GitHub OAuth GITHUB_OAUTH_CLIENT_REDIRECT_URI:',
-        env.GITHUB_OAUTH_CLIENT_REDIRECT_URI,
-      )
-      console.log('GitHub Access Token Data:', githubAccessTokenData)
-
       const { access_token: githubAcessToken } = z
         .object({
           access_token: z.string(),
@@ -70,8 +58,6 @@ export async function authenticateWithGithub(app: FastifyInstance) {
           scope: z.string(),
         })
         .parse(githubAccessTokenData)
-
-      console.log(`githubAcessToken => ${githubAcessToken}`)
 
       const githubUserResponse = await fetch('https://api.github.com/user', {
         headers: {
