@@ -50,17 +50,17 @@ export async function authenticateWithGithub(app: FastifyInstance) {
 
       const githubAccessTokenData = await githubAccessTokenResponse.json()
 
-      const { access_token: githubAccessToken } = z
-        .object({
-          access_token: z.string(),
-          token_type: z.literal('bearer'),
-          scope: z.string(),
-        })
-        .parse(githubAccessTokenData)
+      // const { access_token: githubAccessToken } = z
+      //   .object({
+      //     access_token: z.string(),
+      //     token_type: z.literal('bearer'),
+      //     scope: z.string(),
+      //   })
+      //   .parse(githubAccessTokenData)
 
       const githubUserResponse = await fetch('https://api.github.com/user', {
         headers: {
-          Authorization: `Bearer ${githubAccessToken}`,
+          Authorization: `Bearer ${githubAccessTokenData}`,
         },
       })
 
