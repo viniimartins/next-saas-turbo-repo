@@ -42,7 +42,7 @@ export async function authenticateWithGithub(app: FastifyInstance) {
       )
       githubOAuthURL.searchParams.set('code', code)
 
-      const githubAccessTokenResponse = await fetch(githubOAuthURL, {
+      const githubAccessTokenResponse = await fetch(githubOAuthURL.toString(), {
         method: 'POST',
         headers: {
           Accept: 'application/json',
