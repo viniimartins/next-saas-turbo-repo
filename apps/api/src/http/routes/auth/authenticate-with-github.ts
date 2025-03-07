@@ -3,8 +3,9 @@ import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
-import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
 import { prisma } from '@/lib/prisma'
+
+import { BadRequestError } from '../_errors/bad-request-error'
 
 export async function authenticateWithGithub(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -12,7 +13,7 @@ export async function authenticateWithGithub(app: FastifyInstance) {
     {
       schema: {
         tags: ['Auth'],
-        summary: 'Authenticate with GitHub',
+        summary: 'Authenticate with Github',
         body: z.object({
           code: z.string(),
         }),
@@ -48,41 +49,33 @@ export async function authenticateWithGithub(app: FastifyInstance) {
         },
       })
 
-      const githubAccessTokenData = await githubAccessTokenResponse.text()
+      const githubAcessTokenData = await githubAccessTokenResponse.json()
 
-      console.log(`json ${githubAccessTokenData}`)
-
-      const params = new URLSearchParams(githubAccessTokenData)
-
-      const accessToken = params.get('access_token')
-
-      // const { access_token: githubAccessToken } = z
-      //   .object({
-      //     access_token: z.string(),
-      //     token_type: z.literal('bearer'),
-      //     scope: z.string(),
-      //   })
-      //   .parse(githubAccessTokenData)
+      const { access_token: githubAcessToken } = z
+        .object({
+          access_token: z.string(),
+          token_type: z.literal('bearer'),
+          scope: z.string(),
+        })
+        .parse(githubAcessTokenData)
 
       const githubUserResponse = await fetch('https://api.github.com/user', {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${githubAcessToken}`,
         },
       })
-
-      console.log(githubUserResponse)
 
       const githubUserData = await githubUserResponse.json()
 
       const {
         id: githubId,
         name,
-        email,
         avatar_url: avatarUrl,
+        email,
       } = z
         .object({
           id: z.number().int().transform(String),
-          avatar_url: z.string().url().nullable(),
+          avatar_url: z.string().url(),
           name: z.string().nullable(),
           email: z.string().nullable(),
         })
@@ -101,8 +94,8 @@ export async function authenticateWithGithub(app: FastifyInstance) {
       if (!user) {
         user = await prisma.user.create({
           data: {
-            email,
             name,
+            email,
             avatarUrl,
           },
         })
