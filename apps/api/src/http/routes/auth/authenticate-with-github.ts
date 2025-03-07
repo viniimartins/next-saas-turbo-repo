@@ -49,25 +49,28 @@ export async function authenticateWithGithub(app: FastifyInstance) {
       })
 
       const githubAccessTokenData = await githubAccessTokenResponse.text()
-      const teste = await githubAccessTokenResponse.json()
 
-      console.log(githubAccessTokenData)
+      console.log(`json ${githubAccessTokenData}`)
 
-      console.log(`json ${teste}`)
+      const params = new URLSearchParams(githubAccessTokenData)
 
-      const { access_token: githubAccessToken } = z
-        .object({
-          access_token: z.string(),
-          token_type: z.literal('bearer'),
-          scope: z.string(),
-        })
-        .parse(githubAccessTokenData)
+      const accessToken = params.get('access_token')
+
+      // const { access_token: githubAccessToken } = z
+      //   .object({
+      //     access_token: z.string(),
+      //     token_type: z.literal('bearer'),
+      //     scope: z.string(),
+      //   })
+      //   .parse(githubAccessTokenData)
 
       const githubUserResponse = await fetch('https://api.github.com/user', {
         headers: {
-          Authorization: `Bearer ${githubAccessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       })
+
+      console.log(githubUserResponse)
 
       const githubUserData = await githubUserResponse.json()
 
