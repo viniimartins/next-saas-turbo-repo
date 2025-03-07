@@ -49,7 +49,7 @@ export async function authenticateWithGithub(app: FastifyInstance) {
         },
       })
 
-      const githubAccessTokenData = githubAccessTokenResponse.json()
+      const githubAccessTokenData = await githubAccessTokenResponse.json()
 
       console.log(`githubAccessTokenResponse, ${githubAccessTokenResponse}`)
 
