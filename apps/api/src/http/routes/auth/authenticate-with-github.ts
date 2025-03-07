@@ -3,9 +3,8 @@ import type { FastifyInstance } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
+import { BadRequestError } from '@/http/routes/_errors/bad-request-error'
 import { prisma } from '@/lib/prisma'
-
-import { BadRequestError } from '../_errors/bad-request-error'
 
 export async function authenticateWithGithub(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -13,7 +12,7 @@ export async function authenticateWithGithub(app: FastifyInstance) {
     {
       schema: {
         tags: ['Auth'],
-        summary: 'Authenticate with Github',
+        summary: 'Authenticate with GitHub',
         body: z.object({
           code: z.string(),
         }),
@@ -49,21 +48,19 @@ export async function authenticateWithGithub(app: FastifyInstance) {
         },
       })
 
-      const githubAcessTokenData = await githubAccessTokenResponse.json()
+      const githubAccessTokenData = await githubAccessTokenResponse.json()
 
-      console.log('GitHub Access Token Response:', githubAcessTokenData)
-
-      const { access_token: githubAcessToken } = z
+      const { access_token: githubAccessToken } = z
         .object({
           access_token: z.string(),
           token_type: z.literal('bearer'),
           scope: z.string(),
         })
-        .parse(githubAcessTokenData)
+        .parse(githubAccessTokenData)
 
       const githubUserResponse = await fetch('https://api.github.com/user', {
         headers: {
-          Authorization: `Bearer ${githubAcessToken}`,
+          Authorization: `Bearer ${githubAccessToken}`,
         },
       })
 
@@ -72,8 +69,8 @@ export async function authenticateWithGithub(app: FastifyInstance) {
       const {
         id: githubId,
         name,
-        avatar_url: avatarUrl,
         email,
+        avatar_url: avatarUrl,
       } = z
         .object({
           id: z.number().int().transform(String),
@@ -96,8 +93,8 @@ export async function authenticateWithGithub(app: FastifyInstance) {
       if (!user) {
         user = await prisma.user.create({
           data: {
-            name,
             email,
+            name,
             avatarUrl,
           },
         })
